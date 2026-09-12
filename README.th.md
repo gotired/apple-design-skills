@@ -8,11 +8,11 @@ HIG ของ Apple มีเนื้อหามากกว่า 170 หน�
 
 ## ตัวอย่าง: หน้าจอเดียวกัน ผลลัพธ์ต่างกัน
 
-ภาพด้านล่างเปรียบเทียบหน้าจอ settings เดียวกัน ระหว่างการสร้างโดยไม่มีแหล่งอ้างอิงด้านการออกแบบ กับการใช้ `apple-design` skill ฝั่งขวาใช้ grouped layout, spacing ที่สม่ำเสมอ, hierarchy ที่ชัดเจนขึ้น, touch target ที่ใหญ่ขึ้น, control ที่มีความหมาย และมี action หลักเพียงหนึ่งรายการ
+ภาพด้านล่างเป็น screenshot ที่ render จาก [`examples/comparison.html`](examples/comparison.html) โดยตรง เปรียบเทียบ analytics workspace ระดับ production เดียวกัน ระหว่างการสร้างโดยไม่มีแหล่งอ้างอิงด้านการออกแบบ กับการใช้ `apple-design` skill ฝั่งขวาใช้ grouped layout, spacing ที่สม่ำเสมอ, hierarchy ที่ชัดเจนขึ้น, control ที่มีความหมาย, contrast ที่เข้าถึงได้ และลำดับความสำคัญของ action ที่ชัดเจน
 
 ![ภาพเปรียบเทียบหน้าจอ settings เมื่อไม่ใช้และใช้ apple-design skill](assets/skill-comparison.png)
 
-ภาพนี้เป็นตัวอย่างประกอบ ไม่ใช่ภาพหน้าจออย่างเป็นทางการของ Apple
+ภาพนี้เป็นตัวอย่าง HTML ใน repository ไม่ใช่ภาพหน้าจออย่างเป็นทางการของ Apple
 
 ---
 
@@ -85,6 +85,7 @@ assets/
   type-scales.md              ตาราง Dynamic Type ครบตั้งแต่ xSmall ถึง AX5
 examples/
   settings.html               ตัวอย่างที่รันได้ — หน้าจอ settings แบบ grouped ของ iOS ที่ใช้ token
+  comparison.html             ตัวอย่าง dashboard ระดับ production สำหรับเปรียบเทียบก่อน/หลัง
 scripts/
   refresh-hig.py              crawl Apple ใหม่และสร้าง reference กับ index ที่ได้จากข้อมูลขึ้นใหม่
   preview.sh                  สร้างภาพตัวอย่างในทั้งสอง appearance ด้วย headless Chrome

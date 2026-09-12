@@ -12,13 +12,14 @@ Dynamic Type ladder, and a HIG→CSS mapping for web work.
 
 ## Example: same screen, different outcome
 
-The illustration below compares the same settings screen built without a design reference
+The screenshot below is rendered from [`examples/comparison.html`](examples/comparison.html).
+It compares the same production-scale analytics workspace built without a design reference
 and with the `apple-design` skill. The right-hand version applies grouped layout, consistent
-spacing, clearer hierarchy, larger touch targets, semantic controls, and one prominent action.
+spacing, clearer hierarchy, semantic controls, accessible contrast, and focused action hierarchy.
 
 ![Comparison of a settings screen without and with the apple-design skill](assets/skill-comparison.png)
 
-This is an illustrative example, not an official Apple screenshot.
+This is a local HTML example, not an official Apple screenshot.
 
 ---
 
@@ -94,6 +95,7 @@ assets/
   type-scales.md              the full Dynamic Type tables, xSmall through AX5
 examples/
   settings.html               runnable demo — iOS grouped-settings screen on the tokens
+  comparison.html             production-scale before/after dashboard comparison
 scripts/
   refresh-hig.py              re-crawl Apple and regenerate the derived references and indexes
   preview.sh                  screenshot the demo in both appearances (headless Chrome)

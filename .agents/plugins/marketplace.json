@@ -1,0 +1,20 @@
+{
+  "name": "apple-design-suite",
+  "interface": {
+    "displayName": "Apple Design Suite"
+  },
+  "plugins": [
+    {
+      "name": "apple-design-suite",
+      "source": {
+        "source": "local",
+        "path": "../.."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

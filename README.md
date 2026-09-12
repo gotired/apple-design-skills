@@ -17,7 +17,7 @@ It compares the same production-scale analytics workspace built without a design
 and with the `apple-design` skill. The right-hand version applies grouped layout, consistent
 spacing, clearer hierarchy, semantic controls, accessible contrast, and focused action hierarchy.
 
-![Comparison of a settings screen without and with the apple-design skill](assets/skill-comparison.png)
+![Comparison of a settings screen without and with the apple-design skill](assets/skill-comparison-v2.png)
 
 This is a local HTML example, not an official Apple screenshot.
 

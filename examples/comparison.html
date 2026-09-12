@@ -190,11 +190,11 @@
   .case--bad .project__dot { width: 6px; height: 6px; background: #ef4a62; }
 
   /* Keep the HIG-aligned header readable at this presentation width. */
-  .case--good .main__header { flex-wrap: wrap; gap: 0; }
-  .case--good .main__title { flex: 1 0 100%; }
+  .case--good .main__header { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
+  .case--good .main__title { min-width: 0; }
   .case--good .main__title h2 { white-space: nowrap; font-size: 24px; }
   .case--good .main__title p { white-space: nowrap; }
-  .case--good .toolbar { flex: 1 0 100%; justify-content: flex-end; margin-top: 16px; }
+  .case--good .toolbar { justify-content: flex-end; margin-top: 0; }
   .case--good .button--primary { min-width: 91px; }
 </style>
 </head>

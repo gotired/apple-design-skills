@@ -10,7 +10,7 @@ HIG ของ Apple มีเนื้อหามากกว่า 170 หน�
 
 ภาพด้านล่างเป็น screenshot ที่ render จาก [`examples/comparison.html`](examples/comparison.html) โดยตรง เปรียบเทียบ analytics workspace ระดับ production เดียวกัน ระหว่างการสร้างโดยไม่มีแหล่งอ้างอิงด้านการออกแบบ กับการใช้ `apple-design` skill ฝั่งขวาใช้ grouped layout, spacing ที่สม่ำเสมอ, hierarchy ที่ชัดเจนขึ้น, control ที่มีความหมาย, contrast ที่เข้าถึงได้ และลำดับความสำคัญของ action ที่ชัดเจน
 
-![ภาพเปรียบเทียบหน้าจอ settings เมื่อไม่ใช้และใช้ apple-design skill](assets/skill-comparison.png)
+![ภาพเปรียบเทียบหน้าจอ settings เมื่อไม่ใช้และใช้ apple-design skill](assets/skill-comparison-v2.png)
 
 ภาพนี้เป็นตัวอย่าง HTML ใน repository ไม่ใช่ภาพหน้าจออย่างเป็นทางการของ Apple
 

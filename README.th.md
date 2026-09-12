@@ -6,13 +6,13 @@
 
 HIG ของ Apple มีเนื้อหามากกว่า 170 หน้าและอยู่เบื้องหลังเว็บแอปแบบ single-page ที่ใช้ JavaScript โปรเจกต์นี้สรุปเนื้อหาให้กระชับ พร้อมเพิ่มส่วนที่ Apple เผยแพร่เฉพาะเป็นรูปภาพหรือไม่ได้เผยแพร่ไว้โดยตรง เช่น ค่าสีระบบแบบระบุแน่นอน ตาราง Dynamic Type ครบชุด และการจับคู่ HIG กับ CSS สำหรับงานเว็บ
 
-## ตัวอย่าง: หน้าจอเดียวกัน ผลลัพธ์ต่างกัน
+## ตัวอย่าง: brief เดียวกัน ผลลัพธ์ storefront สามแบบ
 
-ภาพด้านล่างเป็น screenshot ที่ render จาก [`examples/comparison.html`](examples/comparison.html) โดยตรง เปรียบเทียบ analytics workspace ระดับ production เดียวกัน ระหว่างการสร้างโดยไม่มีแหล่งอ้างอิงด้านการออกแบบ กับการใช้ `apple-design` skill ฝั่งขวาใช้ grouped layout, spacing ที่สม่ำเสมอ, hierarchy ที่ชัดเจนขึ้น, control ที่มีความหมาย, contrast ที่เข้าถึงได้ และลำดับความสำคัญของ action ที่ชัดเจน
+ภาพด้านล่างเป็น screenshot ที่ render จาก [`examples/iphone-comparison.html`](examples/iphone-comparison.html) โดยตรง เปรียบเทียบ storefront ขาย iPhone ระดับ production ระหว่างการสร้างโดยไม่มีแหล่งอ้างอิงด้านการออกแบบ, การใช้ `apple-design` skill และการเทียบกับโครงสร้างปัจจุบันของ [หน้า iPhone ของ Apple](https://www.apple.com/iphone/) ฝั่งกลางใช้ product focus, navigation ที่ไม่รบกวน, ตัวเลือก model/finish/storage ที่ชัดเจน, semantic grouping, contrast ที่เข้าถึงได้ และ purchase action หลักเพียงหนึ่งรายการ
 
-![ภาพเปรียบเทียบหน้าจอ settings เมื่อไม่ใช้และใช้ apple-design skill](assets/skill-comparison-v2.png)
+![ภาพเปรียบเทียบ storefront ขาย iPhone เมื่อไม่ใช้และใช้ apple-design skill พร้อม reference จาก Apple.com](assets/iphone-comparison.png)
 
-ภาพนี้เป็นตัวอย่าง HTML ใน repository ไม่ใช่ภาพหน้าจออย่างเป็นทางการของ Apple
+คอลัมน์ที่สามเป็น abstraction ของ Apple.com ใน HTML ภายใน repository ไม่ใช่ screenshot อย่างเป็นทางการและไม่ได้คัดลอก asset สินค้าของ Apple
 
 ---
 
@@ -86,6 +86,7 @@ assets/
 examples/
   settings.html               ตัวอย่างที่รันได้ — หน้าจอ settings แบบ grouped ของ iOS ที่ใช้ token
   comparison.html             ตัวอย่าง dashboard ระดับ production สำหรับเปรียบเทียบก่อน/หลัง
+  iphone-comparison.html      ตัวอย่าง storefront ขาย iPhone เทียบกับโครงสร้างของ Apple.com
 scripts/
   refresh-hig.py              crawl Apple ใหม่และสร้าง reference กับ index ที่ได้จากข้อมูลขึ้นใหม่
   preview.sh                  สร้างภาพตัวอย่างในทั้งสอง appearance ด้วย headless Chrome

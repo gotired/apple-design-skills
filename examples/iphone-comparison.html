@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iPhone storefront comparison</title>
+<link rel="stylesheet" href="../assets/apple-tokens.css">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 1600px; background: #e8e8ed; color: #111114; font-family: var(--font-sans); }
+  .canvas { width: 1600px; min-height: 1000px; padding: 38px 42px 44px; margin: 0 auto; }
+  .intro { display: flex; align-items: end; justify-content: space-between; margin-bottom: 22px; }
+  .eyebrow { margin: 0 0 6px; color: #6f7078; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { margin: 0; font-size: 30px; letter-spacing: -.04em; }
+  .intro__note { margin: 0; color: #72737c; font-size: 14px; }
+  .comparison { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .case__label { display: flex; align-items: center; gap: 9px; margin: 0 0 9px 3px; font-size: 16px; font-weight: 750; }
+  .case__dot { width: 9px; height: 9px; border-radius: 50%; }
+  .case--bad .case__dot { background: #dc4953; }
+  .case--good .case__dot { background: #249a61; }
+  .case--ref .case__dot { background: #111114; }
+  .site { height: 850px; overflow: hidden; border: 1px solid rgb(0 0 0 / .11); border-radius: 18px; background: #fff; box-shadow: 0 16px 38px rgb(0 0 0 / .13), 0 2px 4px rgb(0 0 0 / .08); }
+  .site__chrome { display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-bottom: 1px solid rgb(0 0 0 / .08); background: #f8f8fa; }
+  .traffic { width: 10px; height: 10px; border-radius: 50%; }
+  .traffic--red { background: #ff5f57; } .traffic--yellow { background: #febc2e; } .traffic--green { background: #28c840; }
+  .site__url { margin-left: 7px; color: #868791; font-size: 11px; }
+  .site__body { height: calc(100% - 38px); overflow: hidden; }
+  .nav { display: flex; align-items: center; height: 52px; padding: 0 20px; border-bottom: 1px solid #ededf1; }
+  .nav__brand { display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 750; }
+  .nav__mark { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; color: #fff; background: var(--indigo); font-size: 11px; }
+  .nav__links { display: flex; gap: 18px; margin-left: auto; color: #777882; font-size: 11px; }
+  .nav__action { margin-left: 17px; color: var(--accent); font-size: 11px; font-weight: 700; }
+  .promo { padding: 8px 16px; color: #53545d; background: #f4f4f7; font-size: 10px; text-align: center; }
+  .button { height: 34px; padding: 0 14px; border: 1px solid #d9d9df; border-radius: 9px; color: #44454e; background: #fff; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .button--primary { border-color: transparent; color: #fff; background: var(--accent); box-shadow: 0 3px 8px rgb(0 136 255 / .25); }
+  .phone { position: relative; width: 94px; height: 184px; flex: 0 0 auto; border: 4px solid #19191c; border-radius: 22px; background: linear-gradient(145deg, #ecf0ff, #8ba1dc); box-shadow: inset -8px -10px 18px rgb(0 0 0 / .13), 0 12px 18px rgb(0 0 0 / .18); }
+  .phone::before { content: ""; position: absolute; top: 6px; left: 50%; width: 39px; height: 10px; border-radius: 8px; background: #141418; transform: translateX(-50%); }
+  .phone::after { content: ""; position: absolute; right: 5px; bottom: 6px; left: 5px; height: 2px; border-radius: 2px; background: rgb(255 255 255 / .55); }
+  .phone--blue { background: linear-gradient(145deg, #e8f5ff, #4b9fe8); }
+  .phone--pink { background: linear-gradient(145deg, #fff0f4, #e88da9); }
+  .phone--gold { background: linear-gradient(145deg, #fff9e9, #dab76b); }
+  .camera { position: absolute; top: 21px; left: 11px; width: 29px; height: 29px; border: 3px solid #1c1c20; border-radius: 11px; background: #292b32; box-shadow: 20px 0 0 -3px #292b32, 10px 17px 0 -3px #292b32; }
+  .phone__glow { position: absolute; right: 10px; bottom: 34px; left: 10px; height: 55px; border-radius: 50%; background: rgb(255 255 255 / .24); filter: blur(10px); }
+
+  /* No-skill example: the same brief, but with competing promos and controls. */
+  .case--bad .site { border-radius: 5px; background: #fff; }
+  .case--bad .site__chrome { background: #eceeef; }
+  .case--bad .nav { height: 46px; padding: 0 13px; background: #20232a; color: #fff; }
+  .case--bad .nav__brand { font-size: 13px; }
+  .case--bad .nav__mark { border-radius: 2px; background: #f44d63; }
+  .case--bad .nav__links { gap: 9px; color: #c4c6cd; }
+  .case--bad .nav__action { margin-left: 8px; color: #ffd34d; }
+  .case--bad .promo { padding: 7px 7px; color: #fff; background: #f04c52; font-size: 9px; font-weight: 750; }
+  .case--bad .hero { position: relative; height: 257px; padding: 22px 18px; color: #fff; background: linear-gradient(135deg, #ff7145, #d84365); }
+  .case--bad .hero h2 { max-width: 245px; margin: 0; font-size: 27px; line-height: 1.02; letter-spacing: -.04em; }
+  .case--bad .hero p { max-width: 200px; margin: 9px 0 15px; font-size: 11px; line-height: 1.35; }
+  .case--bad .hero .phone { position: absolute; right: 31px; bottom: -23px; width: 86px; height: 170px; transform: rotate(12deg); }
+  .case--bad .hero .button { height: 30px; border: 0; border-radius: 4px; color: #fff; background: #20232a; font-size: 10px; }
+  .case--bad .deal-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 20px 10px 10px; background: #f0f1f3; }
+  .case--bad .deal { min-height: 103px; padding: 8px; border: 1px solid #c9cdd3; border-radius: 3px; background: #fff; }
+  .case--bad .deal h3 { margin: 0; color: #262932; font-size: 11px; }
+  .case--bad .deal p { margin: 5px 0; color: #7c818b; font-size: 9px; }
+  .case--bad .deal .button { width: 100%; height: 24px; padding: 0 4px; border-radius: 3px; font-size: 8px; }
+  .case--bad .listing { padding: 13px 10px; }
+  .case--bad .listing h3 { margin: 0 0 9px; font-size: 13px; }
+  .case--bad .product-row { display: grid; grid-template-columns: 47px 1fr auto; gap: 8px; align-items: center; min-height: 66px; padding: 7px; border: 1px solid #d2d5db; background: #fbfbfc; }
+  .case--bad .product-row + .product-row { margin-top: 7px; }
+  .case--bad .product-row .phone { width: 39px; height: 55px; border-width: 2px; border-radius: 9px; }
+  .case--bad .product-row .phone::before { top: 3px; width: 18px; height: 5px; }
+  .case--bad .product-row .camera { display: none; }
+  .case--bad .product-row strong { display: block; font-size: 10px; }
+  .case--bad .product-row small { color: #8c919a; font-size: 8px; }
+  .case--bad .price { color: #e34b53; font-size: 11px; font-weight: 800; }
+
+  /* HIG-aligned example: product focus, clear choices, restrained chrome. */
+  .case--good .site__body { background: var(--bg-grouped); }
+  .case--good .nav { background: var(--glass-bg); backdrop-filter: var(--glass-blur); }
+  .case--good .hero { display: grid; grid-template-columns: 1fr 150px; align-items: center; min-height: 294px; padding: 26px 30px; background: var(--bg-grouped-secondary); }
+  .case--good .hero h2 { margin: 0; font: var(--text-title-1); letter-spacing: var(--ls-title-1); font-weight: 700; }
+  .case--good .hero p { margin: 7px 0 16px; color: var(--label-secondary); font: var(--text-body); letter-spacing: var(--ls-body); }
+  .case--good .hero .phone { justify-self: center; width: 108px; height: 212px; }
+  .case--good .hero .button { min-width: 92px; }
+  .case--good .hero__eyebrow { margin: 0 0 7px; color: var(--accent); font-size: 11px; font-weight: 700; }
+  .case--good .selector { padding: 17px 30px 18px; border-top: 1px solid var(--separator); border-bottom: 1px solid var(--separator); background: var(--bg-grouped-secondary); }
+  .case--good .selector__heading { display: flex; align-items: center; justify-content: space-between; }
+  .case--good .selector h3 { margin: 0; font: var(--text-headline); letter-spacing: var(--ls-headline); }
+  .case--good .selector__value { color: var(--label-secondary); font-size: 11px; }
+  .case--good .options { display: flex; gap: 7px; margin-top: 13px; }
+  .case--good .option { min-width: 0; flex: 1; padding: 9px 7px; border: 1px solid var(--separator-opaque); border-radius: var(--r-sm); color: var(--label); background: var(--bg-grouped-secondary); font-size: 10px; text-align: center; }
+  .case--good .option--selected { border: 2px solid var(--accent); padding: 8px 6px; }
+  .case--good .swatches { display: flex; gap: 8px; margin-top: 15px; }
+  .case--good .swatch { width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px var(--separator-opaque); }
+  .case--good .swatch--blue { background: #5fa9e5; } .case--good .swatch--white { background: #f4f4f1; } .case--good .swatch--black { background: #292a2c; } .case--good .swatch--gold { background: #d9bb76; }
+  .case--good .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 17px 30px; background: var(--bg-grouped); }
+  .case--good .feature { padding: 11px 9px; border-radius: var(--r-md); background: var(--bg-grouped-secondary); }
+  .case--good .feature__icon { color: var(--accent); font-size: 15px; }
+  .case--good .feature strong { display: block; margin-top: 7px; font-size: 10px; }
+  .case--good .feature small { display: block; margin-top: 3px; color: var(--label-secondary); font-size: 9px; line-height: 1.25; }
+  .case--good .footnote { padding: 0 30px; color: var(--label-secondary); font-size: 9px; line-height: 1.35; }
+
+  /* Reference example: a local abstraction of the current Apple iPhone page. */
+  .case--ref .site { background: #f5f5f7; }
+  .case--ref .nav { height: 48px; justify-content: center; border: 0; background: rgb(255 255 255 / .78); backdrop-filter: blur(18px); }
+  .case--ref .nav__brand { position: absolute; margin-right: 275px; font-size: 14px; }
+  .case--ref .nav__links { margin: 0; gap: 21px; color: #44444a; font-size: 10px; }
+  .case--ref .nav__action { position: absolute; margin-left: 275px; }
+  .case--ref .promo { padding: 8px 14px; color: #36363b; background: #fff; font-size: 9px; }
+  .case--ref .reference-hero { padding: 23px 23px 19px; color: #fff; background: #000; text-align: center; }
+  .case--ref .reference-hero h2 { margin: 0; font-size: 31px; letter-spacing: -.05em; }
+  .case--ref .reference-hero p { margin: 5px 0 14px; color: #a7a7ad; font-size: 11px; }
+  .case--ref .reference-hero .phone-pair { display: flex; justify-content: center; gap: 12px; height: 190px; }
+  .case--ref .reference-hero .phone { width: 84px; height: 166px; align-self: end; border-color: #36363a; }
+  .case--ref .reference-hero .phone:first-child { transform: rotate(-10deg) translateY(7px); }
+  .case--ref .reference-hero .phone:last-child { transform: rotate(10deg) translateY(7px); }
+  .case--ref .reference-hero .button { height: 29px; border: 0; color: #000; background: #fff; font-size: 10px; }
+  .case--ref .lineup { padding: 18px 16px; background: #f5f5f7; }
+  .case--ref .lineup__heading { display: flex; align-items: baseline; justify-content: space-between; }
+  .case--ref .lineup h3 { margin: 0; font-size: 17px; letter-spacing: -.03em; }
+  .case--ref .lineup__link { color: #06c; font-size: 10px; }
+  .case--ref .lineup-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 12px; }
+  .case--ref .lineup-card { min-height: 176px; padding: 10px 7px; border-radius: 11px; background: #fff; text-align: center; }
+  .case--ref .lineup-card .phone { width: 51px; height: 99px; margin: 0 auto 8px; border-width: 3px; border-radius: 14px; }
+  .case--ref .lineup-card .phone::before { top: 6px; width: 22px; height: 6px; }
+  .case--ref .lineup-card .camera { top: 13px; left: 7px; width: 17px; height: 17px; border-width: 2px; border-radius: 6px; box-shadow: 12px 0 0 -2px #292b32, 6px 11px 0 -2px #292b32; }
+  .case--ref .lineup-card h4 { margin: 0; font-size: 10px; }
+  .case--ref .lineup-card p { min-height: 22px; margin: 4px 0 0; color: #77777e; font-size: 8px; line-height: 1.25; }
+  .case--ref .lineup-card a { display: block; margin-top: 7px; color: #06c; font-size: 8px; }
+  .case--ref .ecosystem { margin: 0 16px; padding: 15px 0; border-top: 1px solid #d6d6da; }
+  .case--ref .ecosystem h3 { margin: 0; font-size: 14px; }
+  .case--ref .ecosystem p { margin: 5px 0 0; color: #77777e; font-size: 9px; line-height: 1.3; }
+  .source { margin-top: 11px; color: #7b7c84; font-size: 10px; }
+</style>
+</head>
+<body>
+<main class="canvas">
+  <header class="intro">
+    <div><p class="eyebrow">Apple HIG case study</p><h1>Same iPhone brief, three storefront outcomes</h1></div>
+    <p class="intro__note">A product page for selling iPhone — without a skill, with the skill, and against Apple’s reference.</p>
+  </header>
+
+  <section class="comparison" aria-label="iPhone storefront comparison">
+    <article class="case case--bad">
+      <h2 class="case__label"><span class="case__dot"></span>WITHOUT SKILL</h2>
+      <div class="site">
+        <div class="site__chrome"><span class="traffic traffic--red"></span><span class="traffic traffic--yellow"></span><span class="traffic traffic--green"></span><span class="site__url">iphone-store.example</span></div>
+        <div class="site__body">
+          <nav class="nav"><span class="nav__brand"><span class="nav__mark">A</span> iPhone Store</span><span class="nav__links"><span>Deals</span><span>Compare</span><span>Support</span></span><span class="nav__action">Cart (2)</span></nav>
+          <div class="promo">LIMITED TIME: 20% OFF + FREE CASE + SAME-DAY DELIVERY</div>
+          <section class="hero"><div><h2>Meet the new iPhone. Better than ever.</h2><p>Choose a model, color, storage, trade-in plan, and accessories all at once.</p><button class="button">Shop every deal →</button></div><div class="phone phone--pink"><span class="camera"></span><span class="phone__glow"></span></div></section>
+          <div class="deal-row"><div class="deal"><h3>Student deal</h3><p>Save $150 today</p><button class="button button--primary">Claim offer</button></div><div class="deal"><h3>Trade in</h3><p>Up to $800 back</p><button class="button button--primary">Get estimate</button></div><div class="deal"><h3>Fast delivery</h3><p>Arrives in 2 hours</p><button class="button button--primary">Check ZIP</button></div></div>
+          <section class="listing"><h3>Popular picks</h3><div class="product-row"><div class="phone phone--blue"><span class="phone__glow"></span></div><div><strong>iPhone 18 Pro</strong><small>256GB · Glacier · Pro camera</small></div><span class="price">$999</span></div><div class="product-row"><div class="phone phone--gold"><span class="phone__glow"></span></div><div><strong>iPhone Air</strong><small>128GB · Light Gold · Ultra thin</small></div><span class="price">$799</span></div><div class="product-row"><div class="phone phone--pink"><span class="phone__glow"></span></div><div><strong>iPhone 17</strong><small>256GB · Lavender · All day battery</small></div><span class="price">$699</span></div></section>
+        </div>
+      </div>
+    </article>
+
+    <article class="case case--good">
+      <h2 class="case__label"><span class="case__dot"></span>WITH APPLE-DESIGN SKILL</h2>
+      <div class="site">
+        <div class="site__chrome"><span class="traffic traffic--red"></span><span class="traffic traffic--yellow"></span><span class="traffic traffic--green"></span><span class="site__url">iphone-store.example</span></div>
+        <div class="site__body">
+          <nav class="nav"><span class="nav__brand"><span class="nav__mark">A</span> iPhone</span><span class="nav__links"><span>Overview</span><span>Models</span><span>Compare</span></span><span class="nav__action">Buy</span></nav>
+          <div class="promo">Free delivery and easy returns.</div>
+          <section class="hero"><div><p class="hero__eyebrow">iPhone Air</p><h2>Thin. Light. Powerful.</h2><p>Pro performance in a beautifully light design.</p><button class="button button--primary">Buy iPhone Air</button></div><div class="phone phone--gold"><span class="camera"></span><span class="phone__glow"></span></div></section>
+          <section class="selector"><div class="selector__heading"><h3>Choose your finish</h3><span class="selector__value">Light Gold</span></div><div class="swatches"><span class="swatch swatch--gold"></span><span class="swatch swatch--blue"></span><span class="swatch swatch--white"></span><span class="swatch swatch--black"></span></div><div class="selector__heading" style="margin-top:15px"><h3>Storage</h3><span class="selector__value">From $799</span></div><div class="options"><div class="option option--selected">128GB</div><div class="option">256GB</div><div class="option">512GB</div></div></section>
+          <section class="features"><div class="feature"><span class="feature__icon">◒</span><strong>Pro performance</strong><small>Fast, responsive, and ready for your day.</small></div><div class="feature"><span class="feature__icon">⌁</span><strong>All-day battery</strong><small>Power that keeps up from morning to night.</small></div><div class="feature"><span class="feature__icon">◉</span><strong>Advanced camera</strong><small>Beautiful photos in every kind of light.</small></div></section>
+          <p class="footnote">Trade in your current phone for credit. Monthly financing available. See full terms.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="case case--ref">
+      <h2 class="case__label"><span class="case__dot"></span>APPLE.COM REFERENCE</h2>
+      <div class="site">
+        <div class="site__chrome"><span class="traffic traffic--red"></span><span class="traffic traffic--yellow"></span><span class="traffic traffic--green"></span><span class="site__url">apple.com/iphone/</span></div>
+        <div class="site__body">
+          <nav class="nav"><span class="nav__brand"></span><span class="nav__links"><span>Store</span><span>Mac</span><span>iPad</span><span>iPhone</span><span>Watch</span></span><span class="nav__action">Buy</span></nav>
+          <div class="promo">Lease a new iPhone with low monthly payments and upgrade at the end of your term.</div>
+          <section class="reference-hero"><h2>iPhone</h2><p>Designed to be loved. Built to last.</p><div class="phone-pair"><div class="phone phone--blue"><span class="camera"></span><span class="phone__glow"></span></div><div class="phone phone--pink"><span class="camera"></span><span class="phone__glow"></span></div></div><button class="button">Explore the lineup</button></section>
+          <section class="lineup"><div class="lineup__heading"><h3>Choose your iPhone</h3><span class="lineup__link">Compare all models →</span></div><div class="lineup-grid"><div class="lineup-card"><div class="phone phone--blue"><span class="camera"></span></div><h4>iPhone Duo</h4><p>Foldable. Posable. Durable.</p><a>Learn more ›</a></div><div class="lineup-card"><div class="phone phone--pink"><span class="camera"></span></div><h4>iPhone 18 Pro</h4><p>Ultimate performance.</p><a>Learn more ›</a></div><div class="lineup-card"><div class="phone phone--gold"><span class="camera"></span></div><h4>iPhone Air</h4><p>Incredibly light and thin.</p><a>Learn more ›</a></div><div class="lineup-card"><div class="phone phone--pink"><span class="camera"></span></div><h4>iPhone 17</h4><p>Powerful and delightful.</p><a>Learn more ›</a></div><div class="lineup-card"><div class="phone phone--white"><span class="camera"></span></div><h4>iPhone 17e</h4><p>Feature stacked.</p><a>Learn more ›</a></div><div class="lineup-card"><div class="phone phone--blue"><span class="camera"></span></div><h4>iPhone 16</h4><p>Amazing performance.</p><a>Learn more ›</a></div></div></section>
+          <section class="ecosystem"><h3>iPhone and your Apple devices</h3><p>Keep your phone, Mac, Watch, and AirPods working together.</p></section>
+        </div>
+      </div>
+    </article>
+  </section>
+  <p class="source">Reference structure checked against <strong>apple.com/iphone/</strong>; product art in this local example is CSS-generated and illustrative.</p>
+</main>
+</body>
+</html>

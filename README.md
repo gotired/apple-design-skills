@@ -10,16 +10,18 @@ The HIG is 170+ pages behind a JavaScript single-page app. This condenses it, an
 parts Apple publishes only as pictures or not at all — exact system color values, the full
 Dynamic Type ladder, and a HIG→CSS mapping for web work.
 
-## Example: same screen, different outcome
+## Example: same product brief, three storefront outcomes
 
-The screenshot below is rendered from [`examples/comparison.html`](examples/comparison.html).
-It compares the same production-scale analytics workspace built without a design reference
-and with the `apple-design` skill. The right-hand version applies grouped layout, consistent
-spacing, clearer hierarchy, semantic controls, accessible contrast, and focused action hierarchy.
+The screenshot below is rendered from [`examples/iphone-comparison.html`](examples/iphone-comparison.html).
+It compares a production-style iPhone storefront built without a design reference, with the
+`apple-design` skill, and against the current structure of [Apple's iPhone page](https://www.apple.com/iphone/).
+The middle version applies product focus, restrained navigation, clear model/finish/storage
+choices, semantic grouping, accessible contrast, and one primary purchase action.
 
-![Comparison of a settings screen without and with the apple-design skill](assets/skill-comparison-v2.png)
+![Comparison of an iPhone storefront without and with the apple-design skill, alongside an Apple.com reference](assets/iphone-comparison.png)
 
-This is a local HTML example, not an official Apple screenshot.
+The third column is a local abstraction of Apple.com, not an official Apple screenshot or a
+copy of Apple's product assets.
 
 ---
 
@@ -96,6 +98,7 @@ assets/
 examples/
   settings.html               runnable demo — iOS grouped-settings screen on the tokens
   comparison.html             production-scale before/after dashboard comparison
+  iphone-comparison.html      iPhone storefront comparison against the Apple.com structure
 scripts/
   refresh-hig.py              re-crawl Apple and regenerate the derived references and indexes
   preview.sh                  screenshot the demo in both appearances (headless Chrome)

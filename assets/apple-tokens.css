@@ -1,0 +1,362 @@
+/* ============================================================================
+   Apple HIG design tokens for the web
+   ----------------------------------------------------------------------------
+   Color values are the current system colors, sampled from the swatch images
+   the HIG publishes. Type sizes and leading are the iOS Dynamic Type "Large"
+   (default) scale. Control sizes and contrast targets come from the HIG
+   Accessibility page.
+
+   Values NOT documented by Apple, chosen here to match the platform look:
+   radii, blur amounts, shadow, easing curves, and the spacing ramp. They are
+   marked (approximation).
+
+   Drop this in, then override --accent with the product's brand color.
+   ========================================================================= */
+
+:root {
+  /* --- Typeface ------------------------------------------------------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+               "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "New York", ui-serif, "Iowan Old Style", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --font-rounded: ui-rounded, "SF Pro Rounded", var(--font-sans);
+
+  /* --- Type scale: iOS Dynamic Type, Large (default) ------------------ */
+  /* size / line-height / weight / letter-spacing (SF Pro tracking table)  */
+  --text-large-title:  400 34px/41px var(--font-sans);   --ls-large-title:  0.40px;
+  --text-title-1:      400 28px/34px var(--font-sans);   --ls-title-1:      0.38px;
+  --text-title-2:      400 22px/28px var(--font-sans);   --ls-title-2:     -0.26px;
+  --text-title-3:      400 20px/25px var(--font-sans);   --ls-title-3:     -0.45px;
+  --text-headline:     600 17px/22px var(--font-sans);   --ls-headline:    -0.43px;
+  --text-body:         400 17px/22px var(--font-sans);   --ls-body:        -0.43px;
+  --text-callout:      400 16px/21px var(--font-sans);   --ls-callout:     -0.31px;
+  --text-subhead:      400 15px/20px var(--font-sans);   --ls-subhead:     -0.23px;
+  --text-footnote:     400 13px/18px var(--font-sans);   --ls-footnote:    -0.08px;
+  --text-caption-1:    400 12px/16px var(--font-sans);   --ls-caption-1:    0px;
+  --text-caption-2:    400 11px/13px var(--font-sans);   --ls-caption-2:    0.06px;
+
+  /* --- System colors, light ------------------------------------------- */
+  --red:    #FF383C;  --orange: #FF8D28;  --yellow: #FFCC00;  --green:  #34C759;
+  --mint:   #00C8B3;  --teal:   #00C3D0;  --cyan:   #00C0E8;  --blue:   #0088FF;
+  --indigo: #6155F5;  --purple: #CB30E0;  --pink:   #FF2D55;  --brown:  #AC7F5E;
+
+  --gray:   #8E8E93;  --gray-2: #AEAEB2;  --gray-3: #C7C7CC;
+  --gray-4: #D1D1D6;  --gray-5: #E5E5EA;  --gray-6: #F2F2F7;
+
+  --accent: var(--blue);
+
+  /* --- Semantic: foreground ------------------------------------------- */
+  --label:            rgb(0 0 0 / 1);
+  --label-secondary:  rgb(60 60 67 / 0.60);
+  --label-tertiary:   rgb(60 60 67 / 0.30);
+  --label-quaternary: rgb(60 60 67 / 0.18);
+  --placeholder:      rgb(60 60 67 / 0.30);
+  --separator:        rgb(60 60 67 / 0.29);
+  --separator-opaque: #C6C6C8;
+  --link:             var(--blue);
+
+  /* --- Semantic: background ------------------------------------------- */
+  --bg:            #FFFFFF;
+  --bg-secondary:  #F2F2F7;
+  --bg-tertiary:   #FFFFFF;
+  --bg-grouped:            #F2F2F7;
+  --bg-grouped-secondary:  #FFFFFF;
+  --bg-grouped-tertiary:   #F2F2F7;
+
+  /* --- Fills (for control backgrounds) -------------------------------- */
+  --fill:            rgb(120 120 128 / 0.20);
+  --fill-secondary:  rgb(120 120 128 / 0.16);
+  --fill-tertiary:   rgb(118 118 128 / 0.12);
+  --fill-quaternary: rgb(116 116 128 / 0.08);
+
+  /* --- Materials (approximation of Liquid Glass / standard) ----------- */
+  --glass-bg:      rgb(255 255 255 / 0.72);
+  --glass-blur:    saturate(180%) blur(20px);
+  --glass-border:  rgb(255 255 255 / 0.55);
+  --glass-clear-bg: rgb(255 255 255 / 0.12);
+  /* HIG: clear glass over bright content wants a 35% dark dimming layer */
+  --glass-clear-dim: rgb(0 0 0 / 0.35);
+  --material-ultrathin: rgb(255 255 255 / 0.40);
+  --material-thin:      rgb(255 255 255 / 0.60);
+  --material-regular:   rgb(255 255 255 / 0.76);
+  --material-thick:     rgb(255 255 255 / 0.88);
+
+  /* --- Radii (approximation) ------------------------------------------ */
+  --r-xs: 6px;    /* small inline controls        */
+  --r-sm: 10px;   /* text fields, small buttons   */
+  --r-md: 12px;   /* standard buttons             */
+  --r-lg: 16px;   /* grouped list, cards          */
+  --r-xl: 22px;   /* sheets, large glass surfaces */
+  --r-pill: 999px;
+
+  /* --- Spacing (approximation, 4pt ramp on a 16pt gutter) ------------- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --gutter: 16px;          /* iOS standard side margin */
+  --gutter-wide: 20px;     /* regular-width layouts    */
+
+  /* --- Hit targets (HIG) ---------------------------------------------- */
+  --touch-target: 44px;    /* iOS / iPadOS / watchOS default */
+  --touch-min:    28px;    /* absolute minimum               */
+  --pointer-target: 28px;  /* macOS default                  */
+
+  /* --- Elevation (approximation) -------------------------------------- */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 1px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.10);
+  --shadow-lg: 0 12px 40px rgb(0 0 0 / 0.16);
+
+  /* --- Motion (approximation of the system feel) ---------------------- */
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-out:      cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-in:       cubic-bezier(0.4, 0.0, 1, 1);
+  --ease-spring:   linear(0, 0.35 12%, 0.72 24%, 0.95 34%, 1.04 43%,
+                          1.05 55%, 1.0 76%, 1);
+  --dur-fast:   150ms;
+  --dur-base:   250ms;
+  --dur-slow:   350ms;
+}
+
+/* ---- Dark: system setting, with an explicit override hook ------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --red:    #FF4245;  --orange: #FF9230;  --yellow: #FFD600;  --green:  #30D158;
+    --mint:   #00DAC3;  --teal:   #00D2E0;  --cyan:   #3CD3FE;  --blue:   #0091FF;
+    --indigo: #6D7CFF;  --purple: #DB34F2;  --pink:   #FF375F;  --brown:  #B78A66;
+
+    --gray:   #8E8E93;  --gray-2: #636366;  --gray-3: #48484A;
+    --gray-4: #3A3A3C;  --gray-5: #2C2C2E;  --gray-6: #1C1C1E;
+
+    --label:            rgb(255 255 255 / 1);
+    --label-secondary:  rgb(235 235 245 / 0.60);
+    --label-tertiary:   rgb(235 235 245 / 0.30);
+    --label-quaternary: rgb(235 235 245 / 0.18);
+    --placeholder:      rgb(235 235 245 / 0.30);
+    --separator:        rgb(84 84 88 / 0.60);
+    --separator-opaque: #38383A;
+
+    /* iOS dark uses two sets: base (recessed) and elevated (advanced).
+       Sheets, popovers and foreground windows take the elevated set.       */
+    --bg:            #000000;
+    --bg-secondary:  #1C1C1E;
+    --bg-tertiary:   #2C2C2E;
+    --bg-elevated:            #1C1C1E;
+    --bg-elevated-secondary:  #2C2C2E;
+    --bg-elevated-tertiary:   #3A3A3C;
+    --bg-grouped:            #000000;
+    --bg-grouped-secondary:  #1C1C1E;
+    --bg-grouped-tertiary:   #2C2C2E;
+
+    --fill:            rgb(120 120 128 / 0.36);
+    --fill-secondary:  rgb(120 120 128 / 0.32);
+    --fill-tertiary:   rgb(118 118 128 / 0.24);
+    --fill-quaternary: rgb(118 118 128 / 0.18);
+
+    --glass-bg:     rgb(30 30 32 / 0.72);
+    --glass-border: rgb(255 255 255 / 0.12);
+    --glass-clear-bg: rgb(0 0 0 / 0.18);
+    --material-ultrathin: rgb(30 30 32 / 0.40);
+    --material-thin:      rgb(30 30 32 / 0.60);
+    --material-regular:   rgb(30 30 32 / 0.76);
+    --material-thick:     rgb(30 30 32 / 0.88);
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.50);
+    --shadow-lg: 0 12px 40px rgb(0 0 0 / 0.60);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --red:    #FF4245;  --orange: #FF9230;  --yellow: #FFD600;  --green:  #30D158;
+  --mint:   #00DAC3;  --teal:   #00D2E0;  --cyan:   #3CD3FE;  --blue:   #0091FF;
+  --indigo: #6D7CFF;  --purple: #DB34F2;  --pink:   #FF375F;  --brown:  #B78A66;
+
+  --gray:   #8E8E93;  --gray-2: #636366;  --gray-3: #48484A;
+  --gray-4: #3A3A3C;  --gray-5: #2C2C2E;  --gray-6: #1C1C1E;
+
+  --label:            rgb(255 255 255 / 1);
+  --label-secondary:  rgb(235 235 245 / 0.60);
+  --label-tertiary:   rgb(235 235 245 / 0.30);
+  --label-quaternary: rgb(235 235 245 / 0.18);
+  --placeholder:      rgb(235 235 245 / 0.30);
+  --separator:        rgb(84 84 88 / 0.60);
+  --separator-opaque: #38383A;
+
+  --bg:            #000000;
+  --bg-secondary:  #1C1C1E;
+  --bg-tertiary:   #2C2C2E;
+  --bg-elevated:            #1C1C1E;
+  --bg-elevated-secondary:  #2C2C2E;
+  --bg-elevated-tertiary:   #3A3A3C;
+  --bg-grouped:            #000000;
+  --bg-grouped-secondary:  #1C1C1E;
+  --bg-grouped-tertiary:   #2C2C2E;
+
+  --fill:            rgb(120 120 128 / 0.36);
+  --fill-secondary:  rgb(120 120 128 / 0.32);
+  --fill-tertiary:   rgb(118 118 128 / 0.24);
+  --fill-quaternary: rgb(118 118 128 / 0.18);
+
+  --glass-bg:     rgb(30 30 32 / 0.72);
+  --glass-border: rgb(255 255 255 / 0.12);
+  --glass-clear-bg: rgb(0 0 0 / 0.18);
+  --material-ultrathin: rgb(30 30 32 / 0.40);
+  --material-thin:      rgb(30 30 32 / 0.60);
+  --material-regular:   rgb(30 30 32 / 0.76);
+  --material-thick:     rgb(30 30 32 / 0.88);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.50);
+  --shadow-lg: 0 12px 40px rgb(0 0 0 / 0.60);
+}
+
+/* ---- Increase Contrast: the HIG's accessible color variants ---------- */
+@media (prefers-contrast: more) {
+  :root:not([data-theme="dark"]) {
+    --red: #E9152D; --orange: #C55300; --yellow: #A16A00; --green: #008932;
+    --mint: #008575; --teal: #008198; --cyan: #007EAE; --blue: #1E6EF4;
+    --indigo: #564ADE; --purple: #B02FC2; --pink: #E7124D; --brown: #956D51;
+    --gray: #6C6C70; --gray-2: #8E8E93; --gray-3: #AEAEB2;
+    --gray-4: #BCBCC0; --gray-5: #D8D8DC; --gray-6: #EBEBF0;
+    --label-secondary: rgb(60 60 67 / 0.80);
+    --separator: rgb(60 60 67 / 0.50);
+  }
+  :root[data-theme="dark"] {
+    --red: #FF6165; --orange: #FFA056; --yellow: #FEDF43; --green: #4AD968;
+    --mint: #54DFCB; --teal: #3BDDEC; --cyan: #6DD9FF; --blue: #5CB8FF;
+    --indigo: #A7AAFF; --purple: #EA8DFF; --pink: #FF8AC4; --brown: #DBA679;
+    --gray: #AEAEB2; --gray-2: #7C7C80; --gray-3: #545456;
+    --gray-4: #444446; --gray-5: #363638; --gray-6: #242426;
+    --label-secondary: rgb(235 235 245 / 0.80);
+    --separator: rgb(84 84 88 / 0.80);
+  }
+}
+
+/* ---- Reduce Transparency: glass becomes opaque ----------------------- */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: var(--bg-secondary);
+    --glass-blur: none;
+    --glass-clear-bg: var(--bg-secondary);
+    --material-ultrathin: var(--bg-secondary);
+    --material-thin: var(--bg-secondary);
+    --material-regular: var(--bg-secondary);
+    --material-thick: var(--bg-secondary);
+  }
+}
+
+/* ---- Reduce Motion --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 1ms; --dur-base: 1ms; --dur-slow: 1ms;
+          --ease-spring: linear; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   Primitives — thin, opt-in. Use them or read them as reference.
+   ========================================================================= */
+
+body {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  color: var(--label);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Liquid Glass: the functional layer only — bars, toolbars, sidebars.
+   Never inside the content layer. */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 0.5px solid var(--glass-border);
+}
+
+/* Clear variant: only over photos and video. Pair with .glass-dim over
+   bright content. */
+.glass-clear {
+  background: var(--glass-clear-bg);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  backdrop-filter: saturate(140%) blur(8px);
+}
+.glass-dim { background: var(--glass-clear-dim); }
+
+/* Scroll edge effect: the transition between content and the control layer,
+   used instead of giving a bar a solid background. */
+.scroll-edge {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+/* Buttons ------------------------------------------------------------- */
+.btn {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  min-height: var(--touch-target);
+  padding: 0 var(--sp-4);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--fill-tertiary);
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity var(--dur-fast) var(--ease-standard),
+              transform var(--dur-fast) var(--ease-standard);
+}
+.btn:active { opacity: 0.6; transform: scale(0.97); }   /* the press state */
+.btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn[disabled] { color: var(--label-tertiary); cursor: default; }
+
+/* One prominent button per view, two at the most.
+   font-weight:600 is load-bearing: white on the default system blue is 3.52:1, which
+   clears AA only at the bold/18pt+ threshold of 3:1. Don't drop it back to Regular. */
+.btn--prominent {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.btn--plain { background: none; padding-inline: var(--sp-2); }
+.btn--destructive { color: var(--red); }
+.btn--destructive.btn--prominent { background: var(--red); color: #fff; }
+
+/* Grouped list — the iOS Settings shape ------------------------------- */
+.list-grouped {
+  background: var(--bg-grouped-secondary);
+  border-radius: var(--r-lg);
+  overflow: clip;
+}
+.list-grouped > * + * { border-top: 0.5px solid var(--separator); }
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--touch-target);
+  padding: var(--sp-3) var(--gutter);
+}
+.list-row__title { font: var(--text-body); letter-spacing: var(--ls-body); }
+.list-row__value { margin-inline-start: auto; color: var(--label-secondary); }
+
+/* Text field ----------------------------------------------------------- */
+.field {
+  font: var(--text-body);
+  letter-spacing: var(--ls-body);
+  min-height: var(--touch-target);
+  padding: 0 var(--sp-3);
+  color: var(--label);
+  background: var(--fill-quaternary);
+  border: none;
+  border-radius: var(--r-sm);
+}
+.field::placeholder { color: var(--placeholder); }
+.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }

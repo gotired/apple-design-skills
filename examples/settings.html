@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>apple-tokens.css — demo</title>
+<link rel="stylesheet" href="../assets/apple-tokens.css">
+<style>
+  /* Page-level layout only. Everything visual comes from apple-tokens.css. */
+  body { margin: 0; background: var(--bg-grouped); }
+
+  .screen { max-width: 430px; margin-inline: auto; min-height: 100vh; }
+
+  /* Liquid Glass lives on the navigation layer, and only there. */
+  .nav {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: var(--sp-3);
+    padding: var(--sp-3) var(--gutter);
+    padding-top: max(var(--sp-3), env(safe-area-inset-top));
+  }
+  .nav__title { font: var(--text-title-1); letter-spacing: var(--ls-title-1); font-weight: 700; }
+  .nav__spacer { margin-inline-start: auto; }
+
+  .content { padding: var(--sp-4) var(--gutter) var(--sp-10); }
+
+  .group-header {
+    font: var(--text-footnote); letter-spacing: var(--ls-footnote);
+    text-transform: uppercase; color: var(--label-secondary);
+    padding: var(--sp-5) var(--sp-4) var(--sp-2);
+  }
+
+  .icon {
+    display: grid; place-items: center;
+    inline-size: 29px; block-size: 29px;
+    border-radius: var(--r-xs); color: #fff; font-size: 15px;
+  }
+  .chevron { color: var(--label-tertiary); font-size: 15px; }
+
+  .row-actions { display: flex; gap: var(--sp-3); margin-top: var(--sp-6); }
+  .row-actions .btn { flex: 1; }
+
+  /* 44px hit area on a visually smaller control. */
+  .icon-btn {
+    position: relative; display: grid; place-items: center;
+    inline-size: 28px; block-size: 28px;
+    border: none; border-radius: var(--r-pill);
+    background: var(--fill-tertiary); color: var(--label-secondary);
+    cursor: pointer;
+  }
+  .icon-btn::after { content: ""; position: absolute; inset: -8px; }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nav { background: var(--bg-grouped); }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <header class="nav glass">
+    <span class="nav__title">Settings</span>
+    <span class="nav__spacer"></span>
+    <button class="icon-btn" id="theme" aria-label="Toggle appearance">◐</button>
+  </header>
+
+  <main class="content">
+
+    <input class="field" style="inline-size:100%; box-sizing:border-box;"
+           type="search" placeholder="Search" aria-label="Search settings">
+
+    <h2 class="group-header">General</h2>
+    <div class="list-grouped">
+      <!-- Value text uses --label-secondary, which is what iOS Settings actually does.
+           Note it measures 3.29:1 on this background: fine for a secondary value, not for
+           anything the reader must read. See references/foundations.md §5. -->
+      <div class="list-row">
+        <span class="icon" style="background: var(--blue)">✈</span>
+        <span class="list-row__title">Airplane Mode</span>
+        <span class="list-row__value">Off</span>
+        <span class="chevron">›</span>
+      </div>
+      <div class="list-row">
+        <span class="icon" style="background: var(--blue)">≋</span>
+        <span class="list-row__title">Wi‑Fi</span>
+        <span class="list-row__value">Home</span>
+        <span class="chevron">›</span>
+      </div>
+      <div class="list-row">
+        <span class="icon" style="background: var(--green)">◉</span>
+        <span class="list-row__title">Sound &amp; Haptics</span>
+        <span class="chevron" style="margin-inline-start:auto">›</span>
+      </div>
+    </div>
+
+    <h2 class="group-header">Account</h2>
+    <div class="list-grouped">
+      <div class="list-row">
+        <span class="icon" style="background: var(--indigo)">☺</span>
+        <span class="list-row__title">Profile</span>
+        <span class="list-row__value">Kittichai</span>
+        <span class="chevron">›</span>
+      </div>
+      <div class="list-row">
+        <span class="icon" style="background: var(--orange)">⚑</span>
+        <span class="list-row__title">Notifications</span>
+        <span class="list-row__value">3 apps</span>
+        <span class="chevron">›</span>
+      </div>
+    </div>
+
+    <!-- One prominent action per view. Destructive is red and is never the default. -->
+    <div class="row-actions">
+      <button class="btn">Cancel</button>
+      <button class="btn btn--prominent">Save Changes</button>
+    </div>
+    <div class="row-actions">
+      <button class="btn btn--destructive" style="flex:1">Delete Account</button>
+    </div>
+
+    <p style="font: var(--text-footnote); letter-spacing: var(--ls-footnote);
+              color: var(--label-secondary); padding: var(--sp-4);">
+      Deleting your account removes all data from this device. This can’t be undone.
+    </p>
+
+  </main>
+</div>
+
+<script>
+  // Explicit override wins over prefers-color-scheme in both directions.
+  const root = document.documentElement;
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    const current = root.dataset.theme || (dark ? 'dark' : 'light');
+    root.dataset.theme = current === 'dark' ? 'light' : 'dark';
+  });
+</script>
+
+</body>
+</html>

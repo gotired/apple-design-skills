@@ -96,6 +96,7 @@
   .profile-copy small { margin-top: 2px; color: #898a94; font-size: 10px; }
   .main { min-width: 0; overflow: hidden; background: #fff; }
   .main__header { display: flex; align-items: center; justify-content: space-between; padding: 24px 30px 18px; }
+  .main__title { min-width: 0; }
   .main__title h2 { margin: 0; font-size: 26px; letter-spacing: -.04em; }
   .main__title p { margin: 5px 0 0; color: #85868f; font-size: 13px; }
   .toolbar { display: flex; align-items: center; gap: 9px; }
@@ -104,6 +105,7 @@
   button { font: inherit; }
   .button { height: 36px; padding: 0 13px; border: 1px solid #d8d8de; border-radius: 9px; color: #404149; background: #fff; font-size: 12px; font-weight: 650; }
   .button--primary { border-color: transparent; color: #fff; background: var(--accent); box-shadow: 0 2px 4px rgb(0 136 255 / .25); }
+  .button--primary { white-space: nowrap; }
   .content { padding: 0 30px 30px; }
   .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .metric { padding: 16px; border: 1px solid #e1e1e6; border-radius: var(--r-lg); background: var(--bg-grouped-secondary); }
@@ -186,6 +188,13 @@
   .case--bad td { height: 34px; padding: 0 10px; }
   .case--bad .project { gap: 5px; font-weight: 700; }
   .case--bad .project__dot { width: 6px; height: 6px; background: #ef4a62; }
+
+  /* Keep the HIG-aligned header readable at this presentation width. */
+  .case--good .main__header { gap: 14px; }
+  .case--good .main__title { flex: 1 1 auto; }
+  .case--good .main__title h2 { white-space: nowrap; font-size: 24px; }
+  .case--good .toolbar { flex: 0 0 auto; }
+  .case--good .button--primary { min-width: 91px; }
 </style>
 </head>
 <body>

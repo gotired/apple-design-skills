@@ -1,0 +1,13 @@
+{
+  "name": "apple-design-suite",
+  "version": "0.1.0",
+  "description": "Composable Apple HIG workflows for design, web implementation, review, QA, and refresh.",
+  "skills": [
+    "./skills/apple-design",
+    "./skills/apple-design-router",
+    "./skills/apple-design-web",
+    "./skills/apple-design-review",
+    "./skills/apple-design-qa",
+    "./skills/apple-design-refresh"
+  ]
+}

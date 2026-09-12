@@ -33,6 +33,7 @@ IMG_BASE = "https://developer.apple.com/tutorials"
 ROOT = "/design/human-interface-guidelines"
 UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15"}
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FRESH_PAGES = {}
 
 
 # --------------------------------------------------------------------------- fetch
@@ -43,29 +44,53 @@ def get(url, binary=False, timeout=30):
     return data if binary else json.loads(data)
 
 
-def page_json(cache, path):
+def write_atomic(path, content):
+    """Replace a generated text file only after its complete content is available."""
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
+    temporary = path + ".tmp"
+    with open(temporary, "w") as file:
+        file.write(content)
+    os.replace(temporary, path)
+
+
+def write_binary_atomic(path, content):
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
+    temporary = path + ".tmp"
+    with open(temporary, "wb") as file:
+        file.write(content)
+    os.replace(temporary, path)
+
+
+def page_json(cache, path, use_cache=False):
     fn = os.path.join(cache, "hig", path.strip("/").replace("/", "__") + ".json")
-    if os.path.exists(fn):
-        return json.load(open(fn))
+    key = (cache, path)
+    if not use_cache and key in FRESH_PAGES:
+        return FRESH_PAGES[key]
+    if use_cache and os.path.exists(fn):
+        with open(fn) as file:
+            return json.load(file)
     try:
         d = get(BASE + path + ".json")
     except Exception as e:
         print(f"  skip {path}: {e}", file=sys.stderr)
         return None
     os.makedirs(os.path.dirname(fn), exist_ok=True)
-    json.dump(d, open(fn, "w"))
+    write_atomic(fn, json.dumps(d))
+    FRESH_PAGES[key] = d
     time.sleep(0.15)
     return d
 
 
-def crawl(cache):
+def crawl(cache, use_cache=False):
     seen, order = set(), []
 
     def walk(path, depth=0):
         if path in seen or depth > 4:
             return
         seen.add(path)
-        d = page_json(cache, path)
+        d = page_json(cache, path, use_cache)
         if not d:
             return
         order.append(path)
@@ -196,14 +221,14 @@ def condense(md):
 
 # ------------------------------------------------------------------------ swatches
 
-def sample_swatches(cache):
+def sample_swatches(cache, use_cache=False):
     """Read the exact system color values out of the HIG's swatch images."""
     try:
         from PIL import Image
     except ImportError:
         print("  Pillow not installed — skipping color sampling", file=sys.stderr)
         return {}
-    d = page_json(cache, ROOT + "/color")
+    d = page_json(cache, ROOT + "/color", use_cache)
     if not d:
         return {}
     out = {}
@@ -219,9 +244,9 @@ def sample_swatches(cache):
         if not urls:
             continue
         fn = os.path.join(outdir, os.path.basename(urls[0]))
-        if not os.path.exists(fn):
+        if not use_cache or not os.path.exists(fn):
             try:
-                open(fn, "wb").write(get(IMG_BASE + urls[0], binary=True, timeout=8))
+                write_binary_atomic(fn, get(IMG_BASE + urls[0], binary=True, timeout=8))
             except Exception as e:
                 print(f"  skip swatch {k}: {e}", file=sys.stderr)
                 continue
@@ -232,7 +257,7 @@ def sample_swatches(cache):
             continue
         w, h = im.size
         out[k.replace(".png", "")] = "#%02X%02X%02X" % im.getpixel((w // 2, h // 2))
-    json.dump(out, open(os.path.join(cache, "swatches.json"), "w"), indent=1)
+    write_atomic(os.path.join(cache, "swatches.json"), json.dumps(out, indent=1))
     return out
 
 
@@ -262,8 +287,10 @@ def slug_of(url):
     return url.rsplit("/", 1)[-1]
 
 
-def write_components(cache, mdroot):
-    d = page_json(cache, ROOT + "/components")
+def write_components(cache, mdroot, source_note, use_cache=False):
+    d = page_json(cache, ROOT + "/components", use_cache)
+    if not d:
+        raise RuntimeError("Could not fetch the HIG components index")
     refs = d["references"]
     out = [COMPONENTS_HEADER]
     for s in d["topicSections"]:
@@ -271,22 +298,26 @@ def write_components(cache, mdroot):
             cat = slug_of(refs[i]["url"])
             ct, _, _ = condense(open(f"{mdroot}/{cat}.md").read())
             out.append(f"\n## {ct}\n")
-            sub = page_json(cache, refs[i]["url"])
+            sub = page_json(cache, refs[i]["url"], use_cache)
+            if not sub:
+                raise RuntimeError(f"Could not fetch component group {refs[i]['url']}")
             r2 = sub["references"]
             for t in sub.get("topicSections", []):
                 for j in t["identifiers"]:
                     slug = slug_of(r2[j]["url"])
                     title, ab, rules = condense(open(f"{mdroot}/{slug}.md").read())
                     out.append(f"### {title}\n{ab}")
-                    out.extend(f"- {r}" for r in rules)
+                    out.extend(f"- {r.rstrip()}" for r in rules)
                     out.append("")
     path = os.path.join(REPO, "references", "components.md")
-    open(path, "w").write("\n".join(out))
+    write_atomic(path, "\n".join(out))
     print(f"  wrote {path}")
 
 
-def write_patterns(cache, mdroot):
-    d = page_json(cache, ROOT + "/patterns")
+def write_patterns(cache, mdroot, source_note, use_cache=False):
+    d = page_json(cache, ROOT + "/patterns", use_cache)
+    if not d:
+        raise RuntimeError("Could not fetch the HIG patterns index")
     refs = d["references"]
     out = [PATTERNS_HEADER]
     for s in d["topicSections"]:
@@ -294,16 +325,16 @@ def write_patterns(cache, mdroot):
             slug = slug_of(refs[i]["url"])
             title, ab, rules = condense(open(f"{mdroot}/{slug}.md").read())
             out.append(f"## {title}\n{ab}")
-            out.extend(f"- {r}" for r in rules)
+            out.extend(f"- {r.rstrip()}" for r in rules)
             out.append("")
     path = os.path.join(REPO, "references", "patterns.md")
-    open(path, "w").write("\n".join(out))
+    write_atomic(path, "\n".join(out))
     print(f"  wrote {path}")
 
 
-def write_technologies(cache):
+def write_technologies(cache, source_note, use_cache=False):
     """Write a complete, low-maintenance index for HIG technology guidance."""
-    d = page_json(cache, ROOT + "/technologies")
+    d = page_json(cache, ROOT + "/technologies", use_cache)
     if not d:
         return
     refs = d.get("references", {})
@@ -314,7 +345,7 @@ def write_technologies(cache):
         "general design rules. This index keeps every current technology page discoverable;",
         "open the official page before making a platform or API decision.",
         "",
-        f"Generated from Apple's HIG data on {datetime.date.today().isoformat()}.",
+        source_note,
         "",
         "| Topic | Official HIG page |",
         "|---|---|",
@@ -339,13 +370,13 @@ def write_technologies(cache):
         "support, and usage-specific restrictions.",
     ])
     path = os.path.join(REPO, "references", "technologies.md")
-    open(path, "w").write("\n".join(out) + "\n")
+    write_atomic(path, "\n".join(out) + "\n")
     print(f"  wrote {path}")
 
 
-def write_coverage(cache):
+def write_coverage(cache, source_note, use_cache=False):
     """Write a generated inventory so missing or newly added HIG topics are visible."""
-    root = page_json(cache, ROOT)
+    root = page_json(cache, ROOT, use_cache)
     if not root:
         return
     refs = root.get("references", {})
@@ -364,7 +395,7 @@ def write_coverage(cache):
         "replacement for Apple's source pages. A topic marked condensed has local guidance;",
         "the official link remains authoritative for details and freshness.",
         "",
-        f"Generated from Apple's HIG data on {datetime.date.today().isoformat()}.",
+        source_note,
         "",
         "| HIG area | Current topics | Local entry point | Coverage model |",
         "|---|---:|---|---|",
@@ -380,7 +411,7 @@ def write_coverage(cache):
                     continue
                 count += 1
                 all_topics.append((area, child_ref["title"], child_ref["url"]))
-                child_page = page_json(cache, child_ref["url"])
+                child_page = page_json(cache, child_ref["url"], use_cache)
                 if child_page:
                     count += descendants(child_page, area)
         return count
@@ -389,7 +420,7 @@ def write_coverage(cache):
         ref = refs.get(identifier, {})
         url = ref.get("url", "")
         slug = slug_of(url)
-        page = page_json(cache, url) if url else None
+        page = page_json(cache, url, use_cache) if url else None
         count = 0
         if page:
             count = descendants(page, ref.get("title", slug))
@@ -402,7 +433,7 @@ def write_coverage(cache):
     for area, title, url in all_topics:
         out.append(f"| {area} | {title} | [Read on Apple](https://developer.apple.com{url}) |")
     path = os.path.join(REPO, "references", "coverage.md")
-    open(path, "w").write("\n".join(out) + "\n")
+    write_atomic(path, "\n".join(out) + "\n")
     print(f"  wrote {path}")
 
 
@@ -410,30 +441,37 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cache", default=os.path.join(REPO, ".hig-cache"),
                     help="where to keep raw JSON, images, and per-page markdown")
+    ap.add_argument("--use-cache", action="store_true",
+                    help="reuse the existing cache instead of fetching a fresh HIG snapshot")
     args = ap.parse_args()
     cache = args.cache
+    source_note = (
+        "Source: cache used where available; rerun without `--use-cache` before relying on freshness."
+        if args.use_cache else
+        f"Fetched from Apple's HIG on {datetime.date.today().isoformat()}."
+    )
     mdroot = os.path.join(cache, "md")
     os.makedirs(mdroot, exist_ok=True)
 
     print("crawling…")
-    pages = crawl(cache)
+    pages = crawl(cache, args.use_cache)
     print(f"  {len(pages)} pages")
 
     print("converting to markdown…")
     for p in pages:
-        d = page_json(cache, p)
+        d = page_json(cache, p, args.use_cache)
         if d:
-            open(f"{mdroot}/{slug_of(p)}.md", "w").write(to_markdown(d))
+            write_atomic(f"{mdroot}/{slug_of(p)}.md", to_markdown(d))
 
     print("sampling system colors…")
-    sw = sample_swatches(cache)
+    sw = sample_swatches(cache, args.use_cache)
     print(f"  {len(sw)} swatches -> {cache}/swatches.json")
 
     print("regenerating references…")
-    write_components(cache, mdroot)
-    write_patterns(cache, mdroot)
-    write_technologies(cache)
-    write_coverage(cache)
+    write_components(cache, mdroot, source_note, args.use_cache)
+    write_patterns(cache, mdroot, source_note, args.use_cache)
+    write_technologies(cache, source_note, args.use_cache)
+    write_coverage(cache, source_note, args.use_cache)
 
     print(f"\nDone. Hand-written files were not touched — diff them against {mdroot}/:")
     for f in ("references/foundations.md", "references/foundations-extended.md",

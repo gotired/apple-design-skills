@@ -14,6 +14,8 @@ HIG ของ Apple มีเนื้อหามากกว่า 170 หน�
 
 คอลัมน์ที่สามเป็น abstraction ของ Apple.com ใน HTML ภายใน repository ไม่ใช่ screenshot อย่างเป็นทางการและไม่ได้คัดลอก asset สินค้าของ Apple
 
+หน้าเปรียบเทียบเป็น case study แบบภาพที่มีความกว้างคงที่เพื่ออธิบายการตัดสินใจ ไม่ใช่ template UI ที่ responsive หรือใช้เป็นมาตรฐาน accessibility ได้ทันที ส่วน `settings.html` คือ example ที่รันได้จริงและผ่านการตรวจ accessibility ของ token
+
 ---
 
 ## การติดตั้ง
@@ -41,9 +43,44 @@ ln -s /Users/<you>/src/apple-design-skill /Users/<you>/.codex/skills/apple-desig
 
 Codex จะตรวจพบสกิลในเซสชันใหม่ เรียกใช้ด้วย `$apple-design` หรือกล่าวถึง `apple-design` ในงานที่มอบหมาย Codex ไม่จำเป็นต้องคัดลอกไฟล์อ้างอิงแยกอีกชุด
 
+## Workflow ในชุดสกิล
+
+repository นี้เป็น plugin bundle ที่ผ่านการตรวจสำหรับ Codex/Claude เช่นกัน สกิลในชุดประกอบกันเป็น workflow ด้าน Apple design จึงใช้ได้แม้ไม่ได้ติดตั้ง companion skill ภายนอก:
+
+| Skill | ใช้เมื่อ |
+|---|---|
+| `$apple-design-router` | เลือก workflow ที่เหมาะกับงาน Apple design |
+| `$apple-design` | ต้องการ HIG สำหรับ platform, component, pattern หรือ foundation |
+| `$apple-design-web` | สร้าง UI HTML/CSS หรือ React ที่ได้แรงบันดาลใจจาก Apple |
+| `$apple-design-review` | audit UI ตาม HIG checklist |
+| `$apple-design-qa` | render และตรวจ light, dark และหน้าจอแคบ |
+| `$apple-design-refresh` | ดึง HIG จาก Apple และสร้าง reference ที่ derive ใหม่ |
+
+ถ้ายังไม่รู้จะเริ่มตรงไหน ให้เรียก `$apple-design-router` แล้วบอกผลลัพธ์ที่ต้องการ เช่น “อยากได้หน้า settings บนเว็บที่ดู native” หรือ “ช่วย review screenshot checkout นี้” สกิลจะเลือกขั้นถัดไปและบอกเส้นทาง build → QA → review เมื่อโจทย์ต้องใช้ครบทั้งสามส่วน
+
+### ตัวอย่างการใช้
+
+```text
+$apple-design-router
+อยากได้หน้า settings บนเว็บที่ดู native
+
+$apple-design-web
+สร้างหน้า account settings ด้วย React สำหรับหน้าจอขนาด iPhone
+
+$apple-design-review
+Review src/Checkout.tsx ตาม HIG และรายงาน blocker ก่อน
+
+$apple-design-qa
+Render examples/settings.html ใน light/dark ที่ 320px และ 390px
+
+$apple-design-refresh
+ดึง HIG ล่าสุด แล้ว review generated diff ก่อนรับการเปลี่ยนแปลง
+```
+
+
 ## สกิลที่ใช้ร่วมกัน
 
-`apple-design` เป็นแหล่งอ้างอิงหลักด้านการออกแบบ ให้ใช้สกิลเสริมต่อไปนี้เฉพาะเมื่องานต้องการความสามารถนั้นโดยตรง สกิลเหล่านี้แยกจาก repository นี้และไม่ควรคัดลอกมาไว้ที่นี่
+ชุดสกิลด้านบนครอบคลุม workflow หลักของตัวเองแล้ว สกิลภายนอกต่อไปนี้เพิ่มความสามารถที่อยู่นอกขอบเขต repository และไม่จำเป็นต่อการใช้ route ภายในชุดสกิล
 
 | สาขางาน | สกิลเสริม | ความสามารถที่เพิ่มเข้ามา |
 |---|---|---|
@@ -88,11 +125,16 @@ examples/
   comparison.html             ตัวอย่าง dashboard ระดับ production สำหรับเปรียบเทียบก่อน/หลัง
   iphone-comparison.html      ตัวอย่าง storefront ขาย iPhone เทียบกับโครงสร้างของ Apple.com
 scripts/
-  refresh-hig.py              crawl Apple ใหม่และสร้าง reference กับ index ที่ได้จากข้อมูลขึ้นใหม่
+  refresh-hig.py              ดึง snapshot ใหม่จาก Apple แล้วสร้าง reference กับ index ใหม่
   preview.sh                  สร้างภาพตัวอย่างในทั้งสอง appearance ด้วย headless Chrome
+  verify.sh                   ตรวจ syntax, link, whitespace และพฤติกรรม refresh cache
 ```
 
 ระบบจะไม่โหลดทุกไฟล์พร้อมกัน `SKILL.md` มีขนาดเล็กและทำหน้าที่เป็นตารางนำทาง เอเจนต์จะเปิดเฉพาะ reference ที่จำเป็นกับงานนั้น
+
+## การอัปเดตเนื้อหาจาก Apple
+
+`python3 scripts/refresh-hig.py` จะดึง snapshot HIG ใหม่ก่อนอัปเดต reference ที่สร้างอัตโนมัติ ใช้ `--use-cache` เฉพาะเมื่อจงใจทำงานแบบ offline หรือใช้ snapshot เดิมเท่านั้น โดย index ที่สร้างจะระบุว่านำข้อมูลจาก cache มาใช้ รัน `scripts/verify.sh` ก่อน commit
 
 ---
 

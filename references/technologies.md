@@ -4,7 +4,7 @@ Apple's technology guidance is integration-specific and changes faster than the
 general design rules. This index keeps every current technology page discoverable;
 open the official page before making a platform or API decision.
 
-Generated from Apple's HIG data on 2026-09-12.
+Source: cache used where available; rerun without `--use-cache` before relying on freshness.
 
 | Topic | Official HIG page |
 |---|---|

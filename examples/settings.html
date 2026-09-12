@@ -25,7 +25,7 @@
 
   .group-header {
     font: var(--text-footnote); letter-spacing: var(--ls-footnote);
-    text-transform: uppercase; color: var(--label-secondary);
+    text-transform: uppercase; color: var(--label-secondary-accessible);
     padding: var(--sp-5) var(--sp-4) var(--sp-2);
   }
 
@@ -37,14 +37,14 @@
   .chevron { color: var(--label-tertiary); font-size: 15px; }
 
   .row-actions { display: flex; gap: var(--sp-3); margin-top: var(--sp-6); }
-  .row-actions .btn { flex: 1; }
+  .row-actions .btn { flex: 1; padding-inline: var(--sp-3); }
 
   /* 44px hit area on a visually smaller control. */
   .icon-btn {
     position: relative; display: grid; place-items: center;
     inline-size: 28px; block-size: 28px;
     border: none; border-radius: var(--r-pill);
-    background: var(--fill-tertiary); color: var(--label-secondary);
+    background: var(--fill-tertiary); color: var(--label-secondary-accessible);
     cursor: pointer;
   }
   .icon-btn::after { content: ""; position: absolute; inset: -8px; }
@@ -71,9 +71,8 @@
 
     <h2 class="group-header">General</h2>
     <div class="list-grouped">
-      <!-- Value text uses --label-secondary, which is what iOS Settings actually does.
-           Note it measures 3.29:1 on this background: fine for a secondary value, not for
-           anything the reader must read. See references/foundations.md §5. -->
+      <!-- The web example uses the AA-safe secondary token. Native Settings can rely on
+           system rendering; a web page must meet its own text-contrast requirement. -->
       <div class="list-row">
         <span class="icon" style="background: var(--blue)">✈</span>
         <span class="list-row__title">Airplane Mode</span>
@@ -119,7 +118,7 @@
     </div>
 
     <p style="font: var(--text-footnote); letter-spacing: var(--ls-footnote);
-              color: var(--label-secondary); padding: var(--sp-4);">
+              color: var(--label-secondary-accessible); padding: var(--sp-4);">
       Deleting your account removes all data from this device. This can’t be undone.
     </p>
 

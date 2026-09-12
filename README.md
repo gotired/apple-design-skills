@@ -23,6 +23,10 @@ choices, semantic grouping, accessible contrast, and one primary purchase action
 The third column is a local abstraction of Apple.com, not an official Apple screenshot or a
 copy of Apple's product assets.
 
+The comparison pages are fixed-width visual case studies for explaining decisions; they
+aren't copy-paste responsive or accessibility-reference UI templates. `settings.html` is the
+runnable, accessibility-checked token example.
+
 ---
 
 ## Install
@@ -52,10 +56,48 @@ ln -s /Users/<you>/src/apple-design-skill /Users/<you>/.codex/skills/apple-desig
 Codex picks it up in a new session. Invoke it with `$apple-design` or by mentioning
 `apple-design` in the task. Codex does not require a separate copy of the reference files.
 
+## Suite workflows
+
+The repository is also a validated Codex/Claude plugin bundle. Its local skills compose into
+one Apple-design workflow, so they work even when unrelated companion skills aren't installed:
+
+| Skill | Use it for |
+|---|---|
+| `$apple-design-router` | Choose the right Apple-design workflow |
+| `$apple-design` | HIG guidance for a platform, component, pattern, or foundation |
+| `$apple-design-web` | Build Apple-inspired HTML/CSS or React UI |
+| `$apple-design-review` | Audit a UI against the HIG checklist |
+| `$apple-design-qa` | Render and inspect light, dark, and narrow layouts |
+| `$apple-design-refresh` | Fetch Apple’s HIG and regenerate derived references |
+
+New to the suite? Start with `$apple-design-router` and describe the outcome you want, such as
+“I need a web settings screen that feels native” or “review this checkout screenshot.” It picks
+the next skill and gives the build → QA → review path when the task needs all three.
+
+### Examples
+
+```text
+$apple-design-router
+I need a web settings screen that feels native.
+
+$apple-design-web
+Build an account settings page in React for iPhone-sized screens.
+
+$apple-design-review
+Review src/Checkout.tsx against the HIG; report blockers first.
+
+$apple-design-qa
+Render examples/settings.html in light and dark at 320px and 390px.
+
+$apple-design-refresh
+Fetch the latest HIG and review the generated diff before accepting it.
+```
+
+
 ## Companion skills
 
-`apple-design` is the design authority. Use these companion skills only when the task needs
-their specific capability; they are separate from this repo and should not be duplicated here.
+The suite above covers its own core workflow. These optional external skills add capabilities
+outside this repository's scope and are never required for the local routes to work.
 
 | Task branch | Companion skill | What it adds |
 |---|---|---|
@@ -100,12 +142,19 @@ examples/
   comparison.html             production-scale before/after dashboard comparison
   iphone-comparison.html      iPhone storefront comparison against the Apple.com structure
 scripts/
-  refresh-hig.py              re-crawl Apple and regenerate the derived references and indexes
+  refresh-hig.py              fetch a fresh Apple snapshot and regenerate derived references/indexes
   preview.sh                  screenshot the demo in both appearances (headless Chrome)
+  verify.sh                   run syntax, link, whitespace, and refresh-cache checks
 ```
 
 Nothing loads all of it. `SKILL.md` is small and holds a routing table; the agent opens only
 the reference the task needs.
+
+## Refreshing Apple content
+
+`python3 scripts/refresh-hig.py` fetches a fresh HIG snapshot before updating the generated
+references. Use `--use-cache` only for an intentional offline or repeatable run; generated
+indexes then disclose that their source is cached. Run `scripts/verify.sh` before committing.
 
 ---
 
@@ -201,8 +250,8 @@ The agent reads `references/web-mapping.md` and starts from `assets/apple-tokens
 }
 ```
 
-Light, dark, Increase Contrast, Reduce Transparency, and Reduce Motion are already wired
-into the token file. `--accent` is the one thing you're expected to override.
+Light, dark, Increase Contrast, Reduce Motion, and a progressive Reduce Transparency fallback
+are wired into the token file. `--accent` is the one thing you're expected to override.
 
 Open `examples/settings.html` in a browser to see the whole thing working:
 

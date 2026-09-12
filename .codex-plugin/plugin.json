@@ -1,0 +1,23 @@
+{
+  "name": "apple-design-suite",
+  "version": "0.1.0",
+  "description": "Apple HIG design, web implementation, review, visual QA, and source refresh workflows.",
+  "author": { "name": "Kittichai" },
+  "license": "MIT",
+  "keywords": ["apple", "hig", "design", "accessibility", "web"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Apple Design Suite",
+    "shortDescription": "Build and audit Apple-aligned interfaces.",
+    "longDescription": "A composable Apple HIG workflow: route, build, review, visually QA, and refresh sources.",
+    "developerName": "Kittichai",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "defaultPrompt": [
+      "Route an Apple design task for me.",
+      "Review this UI against the Apple HIG.",
+      "Build an Apple-aligned web settings screen."
+    ],
+    "brandColor": "#0088FF"
+  }
+}

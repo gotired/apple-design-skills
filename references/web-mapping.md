@@ -26,9 +26,10 @@ slightly wrong — everything is one step too small.
 tracked above 24 pt. A page at `letter-spacing: normal` reads as generic Helvetica. Use the
 `--ls-*` tokens next to each `--text-*` token.
 
-**Dynamic Type has a web equivalent, and it isn't `rem`-only.** Use `rem` so the browser's
-own font-size setting works, and pair it with `clamp()` for fluid headings. What you must
-not do is fix everything in `px` and call it responsive.
+**Dynamic Type has a web equivalent, and it isn't `rem`-only.** Use `rem` for product text
+so the browser's own font-size setting works, and pair it with `clamp()` for fluid headings.
+The supplied tokens deliberately use px as a visual iOS baseline; convert the text tokens
+to rem in a production web build rather than calling that baseline responsive.
 
 ```css
 .title-1 { font: var(--text-title-1); letter-spacing: var(--ls-title-1); }
@@ -80,8 +81,9 @@ The rules that carry over intact:
   at its edge, you have a 2013 header, not a glass one.
 
 `backdrop-filter` costs real GPU time. One or two glass surfaces per page. Always give a
-`@supports not (backdrop-filter: blur(1px))` fallback to an opaque background, and collapse
-glass to opaque under `prefers-reduced-transparency`.
+`@supports not (backdrop-filter: blur(1px))` fallback to an opaque background. The token
+file also listens for `prefers-reduced-transparency`, but browser support is incomplete, so
+products should expose the equivalent `data-reduce-transparency="true"` override too.
 
 ### Scroll edge effect
 

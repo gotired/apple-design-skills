@@ -1,5 +1,7 @@
 # apple-design
 
+[English](README.md) · [ไทย](README.th.md)
+
 A Claude Code and Codex skill that turns Apple's [Human Interface
 Guidelines](https://developer.apple.com/design/human-interface-guidelines) into something an
 agent can actually use: a reference to build against, and a checklist to review against.
@@ -7,6 +9,16 @@ agent can actually use: a reference to build against, and a checklist to review 
 The HIG is 170+ pages behind a JavaScript single-page app. This condenses it, and adds the
 parts Apple publishes only as pictures or not at all — exact system color values, the full
 Dynamic Type ladder, and a HIG→CSS mapping for web work.
+
+## Example: same screen, different outcome
+
+The illustration below compares the same settings screen built without a design reference
+and with the `apple-design` skill. The right-hand version applies grouped layout, consistent
+spacing, clearer hierarchy, larger touch targets, semantic controls, and one prominent action.
+
+![Comparison of a settings screen without and with the apple-design skill](assets/skill-comparison.png)
+
+This is an illustrative example, not an official Apple screenshot.
 
 ---
 
